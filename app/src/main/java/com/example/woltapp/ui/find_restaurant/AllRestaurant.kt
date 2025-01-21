@@ -24,8 +24,8 @@ data class Sections(
 
 @Parcelize
 data class Items(
-    val venue: List<Venue>,
-    val image: List<Images>,
+    val venue: Venue,
+    val image: Images,
 ): Parcelable
 
 @Parcelize

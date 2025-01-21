@@ -47,23 +47,4 @@ class RestaurantDataConverter {
             Gson().fromJson<List<Items>>(items, type)
         }
     }
-
-    @TypeConverter
-    fun fromVenue(venue: List<Venue>?) : String? {
-        return if(venue == null) {
-            null
-        } else {
-            Gson().toJson(venue)
-        }
-    }
-
-    @TypeConverter
-    fun toVenueList(venue: String?) : List<Venue>? {
-        return if(venue == null) {
-            null
-        } else {
-            val type = object : TypeToken<List<Venue>>() {}.type
-            Gson().fromJson<List<Venue>>(venue, type)
-        }
-    }
 }
