@@ -1,5 +1,6 @@
-package com.example.woltapp.features.find_restaurant
+package com.example.woltapp.ui.find_restaurant
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,6 +29,7 @@ fun RestaurantListScreen(
     paddingValues: PaddingValues,
     modifier: Modifier
 ) {
+    Log.d("tag", "padding values is " + paddingValues.calculateTopPadding())
 
     Column(
         modifier = modifier.padding(paddingValues)
@@ -54,16 +56,39 @@ fun RestaurantListScreen(
                     contentColor = colorResource(R.color.white)
                 )
             ) {
-
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = modifier
+                        .padding(start = 6.dp, top = 6.dp)
+                ) {
+                    Text(
+                        stringResource(R.string.time),
+                        color = Color.White,
+                        style = AppTypography.bodyMedium
+                    )
+                    Spacer(Modifier.height(5.dp))
+                    Text(
+                        stringResource(R.string.time_value),
+                        color = Color.White,
+                        style = AppTypography.bodySmall
+                    )
+                }
             }
 
         }
 
         //nearby restaurant text
+        Text(
+            stringResource(R.string.restaurant_list_text),
+            color = colorResource(R.color.text_color),
+            modifier = modifier.padding(16.dp),
+            style = AppTypography.titleMedium
+
+        )
 
         //restaurant list
-    }
 
+    }
 }
 
 
@@ -85,7 +110,6 @@ fun AppElevatedCard(
         )
     ) {
         Row(
-            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
                 .padding(start = 6.dp, top = 6.dp)
@@ -107,6 +131,7 @@ fun AppElevatedCard(
 
         Row(
             horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
                 .padding(start = 6.dp, top = 6.dp)
         ) {

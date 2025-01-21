@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 
@@ -57,6 +58,18 @@ dependencies {
     //hilt-android
     implementation(libs.hilt.android)
     kapt(libs.dagger.hilt.android.compiler)
+
+    //retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+
+    //room for local persistence
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    //kotlin extension and coroutine support for room
+    implementation(libs.androidx.room.ktx)
+
 
     //test libraries
     testImplementation(libs.junit)

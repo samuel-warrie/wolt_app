@@ -1,4 +1,4 @@
-package com.example.woltapp.features
+package com.example.woltapp.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -20,7 +20,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.woltapp.R
-import com.example.woltapp.features.find_restaurant.RestaurantListScreen
+import com.example.woltapp.ui.find_restaurant.RestaurantListScreen
 import com.example.woltapp.ui.theme.AppTheme
 import com.example.woltapp.ui.theme.AppTypography
 
@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
                                 Text(
                                     stringResource(R.string.home),
                                     textAlign = TextAlign.Center,
-                                    style = AppTypography.titleLarge
+                                    style = AppTypography.titleMedium
                                 )
                             },
                             actions = {
