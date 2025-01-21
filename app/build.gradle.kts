@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+    id("kotlin-parcelize")
     id("com.google.dagger.hilt.android")
 
 }
@@ -19,6 +20,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments.put("room.schemaLocation", "$projectDir/schemas")
+            }
+        }
     }
 
     buildTypes {

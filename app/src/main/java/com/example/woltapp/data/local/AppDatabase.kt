@@ -1,8 +1,12 @@
 package com.example.woltapp.data.local
 
-import Restaurants
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.example.woltapp.ui.find_restaurant.AllRestaurant
 
-@Database(entities = [Restaurants::class], version = 1)
-abstract class AppDatabase : RoomDatabase() {}
+@Database(entities = [AllRestaurant::class], version = 1, exportSchema = false)
+@TypeConverters(RestaurantDataConverter::class)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun restaurantDao() : RestaurantDao
+}
