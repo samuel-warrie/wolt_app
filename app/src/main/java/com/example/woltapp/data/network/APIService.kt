@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface APIService {
+fun interface APIService {
 
     @GET("pages/restaurants")
     suspend fun fetchRestaurants(

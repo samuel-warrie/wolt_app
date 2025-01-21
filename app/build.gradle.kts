@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
-    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 
 }
@@ -28,10 +27,7 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-    // Allow references to generated code
-    kapt {
-        correctErrorTypes = true
-    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -57,7 +53,7 @@ dependencies {
 
     //hilt-android
     implementation(libs.hilt.android)
-    kapt(libs.dagger.hilt.android.compiler)
+    ksp(libs.dagger.hilt.android.compiler)
 
     //retrofit
     implementation(libs.retrofit)
