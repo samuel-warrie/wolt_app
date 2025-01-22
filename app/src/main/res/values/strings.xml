@@ -10,4 +10,5 @@
     <string name="time_value">time value</string>
     <string name="restaurant_list_text">Restaurants Nearby:</string>
     <string name="like_button">Like button</string>
+    <string name="error_text">An error occurred</string>
 </resources>

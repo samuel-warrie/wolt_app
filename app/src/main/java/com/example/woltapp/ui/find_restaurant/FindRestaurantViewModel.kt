@@ -23,8 +23,8 @@ class FindRestaurantViewModel @Inject constructor(
             NetworkUiState<Restaurant>>(NetworkUiState.Success(Restaurant(0, "", "", emptyList())))
     val uiState: StateFlow<NetworkUiState<Restaurant>> = _uiState
 
-    private val _currentCoordinate = MutableStateFlow(Coordinates(0.0, 0.0))
-    private val coordinates: StateFlow<Coordinates> = _currentCoordinate
+    private val _coordinates = MutableStateFlow<Coordinates?>(null)
+    val coordinates: StateFlow<Coordinates?> get() = _coordinates
 
 
     val restaurantsFromDb = repository.getRestaurantFromDatabase()
@@ -54,8 +54,6 @@ class FindRestaurantViewModel @Inject constructor(
 
             while(true) {
                 val currentCoordinate = allCoordinates[coordinateIndex]
-                val currentTime = System.currentTimeMillis() / 1000
-                println("time is " +  currentTime)
 
                 //print coordinate values to screen
                 println("lat is: " + currentCoordinate.lat + "and log is: " + currentCoordinate.log )
@@ -67,10 +65,11 @@ class FindRestaurantViewModel @Inject constructor(
                     _uiState.value = result
                 }
 
+                //update coordinates value to the current values
+                _coordinates.value = currentCoordinate
+
                 //a 10secs delay
                 delay(10000)
-
-                println("updated time is " + currentTime)
 
                 //increment index;
                 //for step 2, new index will be 1, 1 % 9 =

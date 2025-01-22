@@ -14,15 +14,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,7 +30,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -52,6 +49,8 @@ fun RestaurantListScreen(
 ) {
 
     val uiState = viewModel.uiState.collectAsState()
+    val currentCoordinates by viewModel.coordinates.collectAsState()
+
     val rest = viewModel.restaurantsFromDb.collectAsState(
         initial = Restaurant(0, null, null, emptyList())
     )
@@ -72,56 +71,22 @@ fun RestaurantListScreen(
             restaurants = (uiState.value as NetworkUiState.Success<Restaurant>).data
         }
         is NetworkUiState.Error -> {
-            Toast.makeText(context, "An error occurred", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, stringResource(R.string.error_text), Toast.LENGTH_LONG).show()
         }
     }
 
     Column(
-        modifier = modifier.fillMaxWidth()
-            .padding(paddingValues)
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(paddingValues),
     ) {
-        //initial top cards
-        Row(
-            horizontalArrangement = Arrangement.Absolute.SpaceEvenly,
-            modifier = modifier.padding(16.dp)
-        ) {
-            AppElevatedCard(
-                colorResource(R.color.pink),
-                modifier
-            )
-
-            ElevatedCard(
-                elevation = CardDefaults.elevatedCardElevation(1.dp),
-                shape = RoundedCornerShape(12.dp),
-                modifier = modifier
-                    .width(200.dp)
-                    .height(80.dp)
-                    .padding(6.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = colorResource(R.color.teal_blue),
-                    contentColor = colorResource(R.color.white)
-                )
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = modifier
-                        .padding(start = 6.dp, top = 6.dp)
-                ) {
-                    Text(
-                        stringResource(R.string.time),
-                        color = Color.White,
-                        style = AppTypography.bodyMedium
-                    )
-                    Spacer(Modifier.height(5.dp))
-                    Text(
-                        stringResource(R.string.time_value),
-                        color = Color.White,
-                        style = AppTypography.bodySmall
-                    )
-                }
-            }
-
-        }
+        //Coordinate value cards
+        AppElevatedCard(
+            colorResource(R.color.pink),
+            modifier,
+            currentCoordinates?.lat?.toString(),
+            currentCoordinates?.log?.toString()
+        )
 
         //nearby restaurant text
         Text(
@@ -131,7 +96,6 @@ fun RestaurantListScreen(
             style = AppTypography.titleMedium
 
         )
-
 
         //Restaurant list
         LazyColumn(
@@ -156,65 +120,6 @@ fun RestaurantListScreen(
 
 
 @Composable
-fun AppElevatedCard(
-    gradientColor: Color,
-    modifier: Modifier
-) {
-    ElevatedCard(
-        elevation = CardDefaults.elevatedCardElevation(1.dp),
-        shape = RoundedCornerShape(12.dp),
-        modifier = modifier
-            .width(200.dp)
-            .height(80.dp)
-            .padding(6.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = gradientColor,
-            contentColor = colorResource(R.color.white)
-        )
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = modifier
-                .padding(start = 6.dp, top = 6.dp)
-        ) {
-            Text(
-                stringResource(R.string.latitude),
-                color = Color.White,
-                style = AppTypography.bodyMedium
-            )
-            Text(
-                stringResource(R.string.value),
-                color = Color.White,
-                textAlign = TextAlign.Center,
-                style = AppTypography.bodySmall
-            )
-        }
-
-        Spacer(modifier = modifier.height(5.dp))
-
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = modifier
-                .padding(start = 6.dp, top = 6.dp)
-        ) {
-            Text(
-                stringResource(R.string.longitude),
-                color = Color.White,
-                style = AppTypography.bodyMedium
-            )
-            Text(
-                stringResource(R.string.value),
-                color = Color.White,
-                textAlign = TextAlign.Center,
-                style = AppTypography.bodySmall
-            )
-        }
-
-    }
-}
-
-@Composable
 fun ItemCard(item: Items, modifier: Modifier) {
     Row(
         modifier = modifier
@@ -233,13 +138,16 @@ fun ItemCard(item: Items, modifier: Modifier) {
             modifier = modifier
                 .width(75.dp)
                 .height(70.dp)
-                .padding(4.dp).align(Alignment.CenterVertically),
+                .padding(4.dp)
+                .align(Alignment.CenterVertically),
             contentScale = ContentScale.Crop // ContentScale.Crop makes sure the image fills the entire box
         )
 
         //restaurant information
         Column(
-            modifier = modifier.weight(1f).padding(start = 8.dp),
+            modifier = modifier
+                .weight(1f)
+                .padding(start = 8.dp),
             verticalArrangement = Arrangement.Center
         ) {
             // Restaurant details
@@ -266,7 +174,9 @@ fun ItemCard(item: Items, modifier: Modifier) {
                 )
 
                 VerticalDivider(thickness = 1.dp, color = Color.Black,
-                    modifier = modifier.padding(start = 4.dp, end = 4.dp).height(2.dp)
+                    modifier = modifier
+                        .padding(start = 4.dp, end = 4.dp)
+                        .height(2.dp)
                 )
 
                 Text(
@@ -286,8 +196,9 @@ fun ItemCard(item: Items, modifier: Modifier) {
 
         //favorite icon
         Box(
-            modifier = modifier.width(40.dp).height(40.dp)
-                //.background(Color.Black)
+            modifier = modifier
+                .width(40.dp)
+                .height(40.dp)
                 .align(Alignment.CenterVertically)
         ) {
             Image(
