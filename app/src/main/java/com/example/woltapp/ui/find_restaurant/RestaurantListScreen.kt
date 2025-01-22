@@ -3,7 +3,9 @@ package com.example.woltapp.ui.find_restaurant
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,13 +17,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -176,8 +180,8 @@ fun ItemCard(item: Items, modifier: Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(100.dp)
-            .background(colorResource(R.color.card_background_color))
+            .height(IntrinsicSize.Min),
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         // Restaurant image
         Image(
@@ -188,40 +192,40 @@ fun ItemCard(item: Items, modifier: Modifier) {
             ),
             contentDescription = null,
             modifier = modifier
-                .width(70.dp)
+                .width(75.dp)
                 .height(70.dp)
                 .padding(4.dp).align(Alignment.CenterVertically),
             contentScale = ContentScale.Crop // ContentScale.Crop makes sure the image fills the entire box
         )
 
+        //restaurant information
         Column(
-            modifier = modifier
-                .padding(start = 12.dp)
+            modifier = modifier.weight(1f).padding(start = 8.dp),
+            verticalArrangement = Arrangement.Center
         ) {
             // Restaurant details
             Text(
                 text = item.venue.name.toString(),
                 style = AppTypography.bodyMedium,
-                maxLines = 3,
+                maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = colorResource(id = R.color.text_color)
             )
 
-            Spacer(modifier = modifier.height(5.dp))
+           /* Spacer(modifier = modifier.height(2.dp))
 
             Text(
                 text = item.venue.shortDescription.toString(),
                 style = AppTypography.bodyMedium,
                 color = Color.Black
-            )
+            )*/
 
-            Spacer(modifier = modifier.height(10.dp))
+            Spacer(modifier = modifier.height(5.dp))
 
             // Address and Country
             Row(
                 modifier = modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                horizontalArrangement = Arrangement.Start,
             ) {
 
                 Text(
@@ -230,27 +234,38 @@ fun ItemCard(item: Items, modifier: Modifier) {
                     color = Color.Black
                 )
 
+                VerticalDivider(thickness = 1.dp, color = Color.Black,
+                    modifier = modifier.padding(start = 4.dp, end = 4.dp).height(2.dp)
+                )
+
                 Text(
                     text = item.venue.country.toString(),
                     style = AppTypography.bodyMedium,
                     color = Color.Black
                 )
-
             }
-        }
 
-        IconButton(onClick = {
+            Spacer(modifier = modifier.height(5.dp))
 
-        }, modifier = modifier.padding(start = 8.dp)) {
-            Icon(
-                painter = painterResource(id = R.drawable.favorite_border_icon),
-                contentDescription = stringResource(R.string.like_button),
-                modifier = modifier
-                    .width(50.dp)
-                    .height(50.dp),
-                tint = Color.Green
+            HorizontalDivider(
+                color = Color.Black,
+                thickness = 0.3.dp
             )
         }
+
+        //favorite icon
+        Box(
+            modifier = modifier.width(40.dp).height(40.dp)
+                //.background(Color.Black)
+                .align(Alignment.CenterVertically)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.favorite_border_icon),
+                contentDescription = stringResource(id = R.string.like_button),
+                colorFilter = ColorFilter.tint(Color.Black)
+            )
+        }
+
     }
 
 }
