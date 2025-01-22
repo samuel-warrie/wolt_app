@@ -1,9 +1,8 @@
 package com.example.woltapp.data.local
 
 import androidx.room.TypeConverter
-import com.example.woltapp.ui.find_restaurant.Items
-import com.example.woltapp.ui.find_restaurant.Sections
-import com.example.woltapp.ui.find_restaurant.Venue
+import com.example.woltapp.ui.find_restaurant.data.Items
+import com.example.woltapp.ui.find_restaurant.data.Sections
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

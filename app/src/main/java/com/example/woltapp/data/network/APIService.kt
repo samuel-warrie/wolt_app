@@ -1,6 +1,6 @@
 package com.example.woltapp.data.network
 
-import com.example.woltapp.ui.find_restaurant.AllRestaurant
+import com.example.woltapp.ui.find_restaurant.data.Restaurant
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -13,7 +13,7 @@ fun interface APIService {
     @GET("pages/restaurants")
     suspend fun fetchRestaurants(
         @Query("lat") lat: Double,
-        @Query("lon") lon: Double) : List<AllRestaurant>
+        @Query("lon") lon: Double) : Restaurant
 
     companion object {
         private const val BASE_URL = "https://restaurant-api.wolt.com/v1/"

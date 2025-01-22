@@ -1,7 +1,7 @@
-package com.example.woltapp.ui.find_restaurant
+package com.example.woltapp.ui.find_restaurant.compose
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,30 +18,63 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.woltapp.R
+import com.example.woltapp.data.network.NetworkUiState
+import com.example.woltapp.ui.find_restaurant.FindRestaurantViewModel
+import com.example.woltapp.ui.find_restaurant.data.Items
+import com.example.woltapp.ui.find_restaurant.data.Restaurant
 import com.example.woltapp.ui.theme.AppTypography
 
 @Composable
 fun RestaurantListScreen(
     paddingValues: PaddingValues,
+    viewModel: FindRestaurantViewModel = hiltViewModel(),
     modifier: Modifier
 ) {
+
+    val uiState = viewModel.uiState.collectAsState()
+    val rest = viewModel.restaurantsFromDb.collectAsState(
+        initial = Restaurant(0, null, null, emptyList())
+    )
+
+    val context = LocalContext.current
+    var restaurants: Restaurant? = null
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchRestaurant()
+    }
+
+    when(uiState.value) {
+        is NetworkUiState.Loading -> {
+           //show loading view
+            CircularLoader()
+        }
+        is NetworkUiState.Success -> {
+            restaurants = (uiState.value as NetworkUiState.Success<Restaurant>).data
+        }
+        is NetworkUiState.Error -> {
+            Toast.makeText(context, "An error occurred", Toast.LENGTH_LONG).show()
+        }
+    }
 
     Column(
         modifier = modifier.fillMaxWidth()
@@ -99,18 +132,24 @@ fun RestaurantListScreen(
 
         )
 
+
         //Restaurant list
-        val data = dummyData()
         LazyColumn(
             modifier = modifier.padding(10.dp)
         ) {
-            val itemList: List<Items> = data.sections.flatMap {
-                section ->
-                section.items.orEmpty()
+            if(restaurants != null) {
+                val itemList: List<Items> = restaurants.sections.flatMap { section ->
+                    section.items.orEmpty() // Avoid null list
+                }.filter { item ->
+                    item.venue != null && item.venue.name?.isNotBlank() == true // Ensure venue is not null and name is not blank
+                }
+
+                items(itemList.size) { index ->
+                    ItemCard(itemList[index], modifier.padding(bottom = 8.dp))
+                }
             }
-            items(itemList.size) { index ->
-                ItemCard(itemList[index], modifier.padding(bottom = 8.dp))
-            }
+
+
         }
     }
 }
@@ -186,7 +225,7 @@ fun ItemCard(item: Items, modifier: Modifier) {
         // Restaurant image
         Image(
             painter = rememberAsyncImagePainter(
-                model = item.image.url,
+                model = item.image?.url,
                 placeholder = painterResource(R.drawable.image_placeholder),
                 error = painterResource(R.drawable.icon_error)
             ),
@@ -205,20 +244,12 @@ fun ItemCard(item: Items, modifier: Modifier) {
         ) {
             // Restaurant details
             Text(
-                text = item.venue.name.toString(),
+                text = item.venue?.name ?: "Name",
                 style = AppTypography.bodyMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = colorResource(id = R.color.text_color)
             )
-
-           /* Spacer(modifier = modifier.height(2.dp))
-
-            Text(
-                text = item.venue.shortDescription.toString(),
-                style = AppTypography.bodyMedium,
-                color = Color.Black
-            )*/
 
             Spacer(modifier = modifier.height(5.dp))
 
@@ -229,7 +260,7 @@ fun ItemCard(item: Items, modifier: Modifier) {
             ) {
 
                 Text(
-                    text = item.venue.address.toString(),
+                    text = item.venue?.address ?: "Address",
                     style = AppTypography.bodyMedium,
                     color = Color.Black
                 )
@@ -239,7 +270,7 @@ fun ItemCard(item: Items, modifier: Modifier) {
                 )
 
                 Text(
-                    text = item.venue.country.toString(),
+                    text = item.venue?.country ?: "Country",
                     style = AppTypography.bodyMedium,
                     color = Color.Black
                 )

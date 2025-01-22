@@ -20,10 +20,12 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.woltapp.R
-import com.example.woltapp.ui.find_restaurant.RestaurantListScreen
+import com.example.woltapp.ui.find_restaurant.compose.RestaurantListScreen
 import com.example.woltapp.ui.theme.AppTheme
 import com.example.woltapp.ui.theme.AppTypography
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

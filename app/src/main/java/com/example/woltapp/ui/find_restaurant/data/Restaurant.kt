@@ -1,4 +1,4 @@
-package com.example.woltapp.ui.find_restaurant
+package com.example.woltapp.ui.find_restaurant.data
 
 import android.os.Parcelable
 import androidx.room.Entity
@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-@Entity
-data class AllRestaurant(
+@Entity(tableName = "restaurants")
+data class Restaurant(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val name: String?,
@@ -24,8 +24,8 @@ data class Sections(
 
 @Parcelize
 data class Items(
-    val venue: Venue,
-    val image: Images,
+    val venue: Venue?,
+    val image: Images?,
 ): Parcelable
 
 @Parcelize

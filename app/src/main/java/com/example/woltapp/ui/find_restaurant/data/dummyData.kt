@@ -1,10 +1,10 @@
-package com.example.woltapp.ui.find_restaurant
+package com.example.woltapp.ui.find_restaurant.data
 
 
- fun dummyData(): AllRestaurant {
+fun dummyData(): Restaurant {
         //restaurant list lazy-column
         val list =
-            AllRestaurant(
+            Restaurant(
                 1, "restaurants", "Restaurants", listOf(
                     Sections(
                         listOf(

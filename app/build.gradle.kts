@@ -42,6 +42,7 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
     }
@@ -60,7 +61,9 @@ dependencies {
 
     //hilt-android
     implementation(libs.hilt.android)
+    testImplementation(libs.junit.jupiter)
     ksp(libs.dagger.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     //retrofit
     implementation(libs.retrofit)
@@ -75,7 +78,6 @@ dependencies {
 
     //coil
     implementation(libs.coil.compose)
-
 
     //test libraries
     testImplementation(libs.junit)
