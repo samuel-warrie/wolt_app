@@ -3,6 +3,7 @@ package com.example.woltapp.ui.find_restaurant.data
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.woltapp.R
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

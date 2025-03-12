@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
@@ -45,13 +46,13 @@ import com.example.woltapp.ui.theme.AppTypography
 fun RestaurantListScreen(
     paddingValues: PaddingValues,
     viewModel: FindRestaurantViewModel = hiltViewModel(),
-    modifier: Modifier
+    onAboutClick: () -> Unit, // Add this parameter to match NavGraph.kt
+    modifier: Modifier = Modifier
 ) {
-
-    val uiState = viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val currentCoordinates by viewModel.coordinates.collectAsState()
 
-    val rest = viewModel.restaurantsFromDb.collectAsState(
+    val rest by viewModel.restaurantsFromDb.collectAsState(
         initial = Restaurant(0, null, null, emptyList())
     )
 
@@ -62,13 +63,12 @@ fun RestaurantListScreen(
         viewModel.fetchRestaurant()
     }
 
-    when(uiState.value) {
+    when (uiState) {
         is NetworkUiState.Loading -> {
-           //show loading view
             CircularLoader()
         }
         is NetworkUiState.Success -> {
-            restaurants = (uiState.value as NetworkUiState.Success<Restaurant>).data
+            restaurants = (uiState as NetworkUiState.Success<Restaurant>).data
         }
         is NetworkUiState.Error -> {
             Toast.makeText(context, stringResource(R.string.error_text), Toast.LENGTH_LONG).show()
@@ -80,44 +80,49 @@ fun RestaurantListScreen(
             .fillMaxWidth()
             .padding(paddingValues),
     ) {
-        //Coordinate value cards
+        // Coordinate value cards
         AppElevatedCard(
             colorResource(R.color.pink),
             modifier,
             currentCoordinates?.lat?.toString(),
             currentCoordinates?.log?.toString()
         )
+        // About App Button (placed below coordinate card)
+        Button(
+            onClick = onAboutClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 8.dp)
+        ) {
+            Text(text = stringResource(R.string.about_app_button))
+        }
 
-        //nearby restaurant text
+        // Nearby restaurant text
         Text(
             stringResource(R.string.restaurant_list_text),
             color = colorResource(R.color.text_color),
             modifier = modifier.padding(16.dp),
             style = AppTypography.titleMedium
-
         )
 
-        //Restaurant list
+        // Restaurant list
         LazyColumn(
             modifier = modifier.padding(10.dp)
         ) {
-            if(restaurants != null) {
+            if (restaurants != null) {
                 val itemList: List<Items> = restaurants.sections.flatMap { section ->
-                    section.items.orEmpty() // Avoid null list
+                    section.items.orEmpty()
                 }.filter { item ->
-                    item.venue != null && item.venue.name?.isNotBlank() == true // Ensure venue is not null and name is not blank
+                    item.venue != null && item.venue.name?.isNotBlank() == true
                 }
 
                 items(itemList.size) { index ->
                     ItemCard(itemList[index], modifier.padding(bottom = 8.dp))
                 }
             }
-
-
         }
     }
 }
-
 
 @Composable
 fun ItemCard(item: Items, modifier: Modifier) {
@@ -140,17 +145,16 @@ fun ItemCard(item: Items, modifier: Modifier) {
                 .height(70.dp)
                 .padding(4.dp)
                 .align(Alignment.CenterVertically),
-            contentScale = ContentScale.Crop // ContentScale.Crop makes sure the image fills the entire box
+            contentScale = ContentScale.Crop
         )
 
-        //restaurant information
+        // Restaurant information
         Column(
             modifier = modifier
                 .weight(1f)
                 .padding(start = 8.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            // Restaurant details
             Text(
                 text = item.venue?.name ?: "Name",
                 style = AppTypography.bodyMedium,
@@ -161,19 +165,19 @@ fun ItemCard(item: Items, modifier: Modifier) {
 
             Spacer(modifier = modifier.height(5.dp))
 
-            // Address and Country
             Row(
                 modifier = modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Start,
             ) {
-
                 Text(
                     text = item.venue?.address ?: "Address",
                     style = AppTypography.bodyMedium,
                     color = Color.Black
                 )
 
-                VerticalDivider(thickness = 1.dp, color = Color.Black,
+                VerticalDivider(
+                    thickness = 1.dp,
+                    color = Color.Black,
                     modifier = modifier
                         .padding(start = 4.dp, end = 4.dp)
                         .height(2.dp)
@@ -194,7 +198,7 @@ fun ItemCard(item: Items, modifier: Modifier) {
             )
         }
 
-        //favorite icon
+        // Favorite icon
         Box(
             modifier = modifier
                 .width(40.dp)
@@ -207,9 +211,5 @@ fun ItemCard(item: Items, modifier: Modifier) {
                 colorFilter = ColorFilter.tint(Color.Black)
             )
         }
-
     }
-
 }
-
-

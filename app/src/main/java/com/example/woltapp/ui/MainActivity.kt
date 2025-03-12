@@ -20,7 +20,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.woltapp.R
-import com.example.woltapp.ui.find_restaurant.compose.RestaurantListScreen
+import com.example.woltapp.ui.find_restaurant.compose.FindRestaurantNavHost
 import com.example.woltapp.ui.theme.AppTheme
 import com.example.woltapp.ui.theme.AppTypography
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
                             ),
                             navigationIcon = {
                                 IconButton(onClick = {
-
+                                    // TODO: Implement menu action if needed
                                 }) {
                                     Icon(
                                         imageVector = Icons.Filled.Menu,
@@ -62,6 +62,7 @@ class MainActivity : ComponentActivity() {
                             },
                             actions = {
                                 IconButton(onClick = {
+                                    // TODO: Implement settings action if needed
                                 }) {
                                     Icon(
                                         imageVector = Icons.Filled.Settings,
@@ -71,8 +72,10 @@ class MainActivity : ComponentActivity() {
                             },
                         )
                     }
-                ) {
-                    RestaurantListScreen(it, modifier = Modifier)
+                ) { paddingValues ->
+                    FindRestaurantNavHost(
+                        paddingValues = paddingValues // Pass paddingValues to NavHost
+                    )
                 }
             }
         }

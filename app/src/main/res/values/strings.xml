@@ -4,11 +4,16 @@
     <string name="latitude">Latitude: </string>
     <string name="value">Value</string>
     <string name="longitude">Longitude: </string>
-    <string name="setting_description">An icon on the homepage that leads to sttings page.\n</string>
+    <string name="setting_description">An icon on the homepage that leads to settings page.\n</string>
     <string name="menu_icon">Menu Icon</string>
     <string name="time">Time:  </string>
     <string name="time_value">time value</string>
     <string name="restaurant_list_text">Restaurants Nearby:</string>
     <string name="like_button">Like button</string>
     <string name="error_text">An error occurred</string>
+    <string name="about_description">Provides an about app screen and list of restaurants every 10 seconds</string>
+    <string name="about_title">About App</string>
+    <string name="about_usage">Usage: Restaurants updates every 10 seconds</string>
+    <string name="about_developer">Developed by Samuel Warrie for Oulu UAS, Spring 2025</string>
+    <string name="about_app_button">About App</string>
 </resources>

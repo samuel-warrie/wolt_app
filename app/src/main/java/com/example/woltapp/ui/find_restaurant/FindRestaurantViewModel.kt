@@ -18,7 +18,7 @@ import javax.inject.Inject
 class FindRestaurantViewModel @Inject constructor(
     private val repository: RestaurantListRepository
 ): ViewModel() {
-
+    val navigateToAbout = MutableStateFlow(false)
     private val _uiState = MutableStateFlow<
             NetworkUiState<Restaurant>>(NetworkUiState.Success(Restaurant(0, "", "", emptyList())))
     val uiState: StateFlow<NetworkUiState<Restaurant>> = _uiState
