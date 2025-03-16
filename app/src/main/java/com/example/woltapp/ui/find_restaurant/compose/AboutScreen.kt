@@ -42,7 +42,7 @@ fun AboutScreen(onBackClick: () -> Unit) {
             onClick = onBackClick,
             modifier = Modifier.padding(top = 16.dp)
         ) {
-            Text("Back")
+            Text(stringResource(R.string.back))
         }
     }
 }

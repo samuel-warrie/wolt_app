@@ -156,7 +156,7 @@ fun ItemCard(item: Items, modifier: Modifier) {
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = item.venue?.name ?: "Name",
+                text = item.venue?.name ?: stringResource(R.string.name),
                 style = AppTypography.bodyMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -170,7 +170,7 @@ fun ItemCard(item: Items, modifier: Modifier) {
                 horizontalArrangement = Arrangement.Start,
             ) {
                 Text(
-                    text = item.venue?.address ?: "Address",
+                    text = item.venue?.address ?: stringResource(R.string.address),
                     style = AppTypography.bodyMedium,
                     color = Color.Black
                 )
@@ -184,7 +184,7 @@ fun ItemCard(item: Items, modifier: Modifier) {
                 )
 
                 Text(
-                    text = item.venue?.country ?: "Country",
+                    text = item.venue?.country ?: stringResource(R.string.country),
                     style = AppTypography.bodyMedium,
                     color = Color.Black
                 )
